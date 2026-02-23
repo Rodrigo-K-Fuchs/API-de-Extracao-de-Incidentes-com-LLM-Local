@@ -1,0 +1,14 @@
+# Web API
+fastapi==0.115.6
+uvicorn==0.34.0
+
+# Validação / modelos
+pydantic==2.10.6
+
+# LangChain core
+langchain==0.3.19
+langchain-core==0.3.43
+langchain-ollama==0.2.1
+
+# Utilidades
+python-dotenv==1.0.1
