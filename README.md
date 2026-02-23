@@ -1,0 +1,1 @@
+# API-de-Extra-o-de-Incidentes-com-LLM-Local
