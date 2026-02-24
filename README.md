@@ -57,7 +57,7 @@ Isso garante maior **consistência**, **reprodutibilidade** e **testabilidade** 
 │
 ├── model/
 │   ├── incident.py               # Modelo Pydantic do incidente
-│   └── incident_prompt.py       # Prompt utilizado pelo LLM
+│   └── incident_prompt.py        # Prompt utilizado pelo LLM
 │
 ├── tests/
 │   ├── unit/                     # Testes unitários
@@ -72,59 +72,79 @@ Isso garante maior **consistência**, **reprodutibilidade** e **testabilidade** 
 
 ---
 
-## 🛠️ Requisitos
+## 🛠️ Pré-requisitos
 
-- [Docker](https://www.docker.com/)
-- [Docker Compose](https://docs.docker.com/compose/)
-- [Ollama](https://ollama.com) instalado localmente
+Antes de começar, você precisa ter instalado:
 
-> **Atenção:** o Ollama não roda dentro do container. A API apenas se comunica com ele via HTTP.
+- [Docker Desktop](https://docs.docker.com/get-started/introduction/get-docker-desktop/)
+- [Git](https://git-scm.com/downloads) ou [GitHub CLI](https://cli.github.com/) *(para clonar o repositório)*
+
+> **Importante:** o Ollama **não** roda dentro do container Docker. A API se comunica com ele via HTTP a partir do host. Certifique-se de que o Ollama está rodando localmente antes de subir a aplicação.
 
 ---
 
-## 🤖 Instalando o Ollama
+## 🚀 Instalação e Configuração
 
-Após instalar o Ollama, baixe o modelo e inicie o servidor:
+### 1. Instalar o Docker Desktop
+
+Acesse e siga as instruções do instalador para o seu sistema operacional:
+
+👉 https://docs.docker.com/get-started/introduction/get-docker-desktop/
+
+Após a instalação, **abra o Docker Desktop** e aguarde ele inicializar completamente (ícone na bandeja do sistema deve ficar verde/estável).
+
+### 2. Clonar o repositório
+
+**Opção A — GitHub CLI (recomendado):**
 
 ```bash
-ollama pull llama3.2
-ollama serve
+gh repo clone Rodrigo-K-Fuchs/API-de-Extracao-de-Incidentes-com-LLM-Local
 ```
+
+**Opção B — Git padrão:**
+
+```bash
+git clone https://github.com/Rodrigo-K-Fuchs/API-de-Extracao-de-Incidentes-com-LLM-Local.git
+```
+
+**Opção C — Download ZIP:**
+
+Na página do repositório no GitHub, clique em `Code` → `Download ZIP` e extraia o conteúdo.
+
+---
+
+### 3. Navegar até a pasta do projeto
+
+Após clonar ou extrair o ZIP, acesse a pasta raiz do projeto:
+
+```bash
+cd API-de-Extracao-de-Incidentes-com-LLM-Local
+```
+
+> ⚠️ **Todos os comandos a seguir devem ser executados a partir desta pasta.**
 
 ---
 
 ## 🐳 Rodando com Docker
 
-### 1. Build da imagem
+### Build da imagem
 
 ```bash
 docker build -t incident-api .
 ```
 
-### 2. Subindo a aplicação
-
-**Opção A — Docker Compose (recomendado)**
+### Subindo a aplicação
 
 ```bash
 docker compose up
 ```
-
-**Opção B — Docker Run**
-
-```bash
-docker run -p 8000:8000 \
-  -e OLLAMA_HOST=http://host.docker.internal:11434 \
-  -e OLLAMA_MODEL=llama3.2 \
-  incident-api
-```
-
-A API estará disponível em `http://localhost:8000`.
-
+Para encerrar:
+CTRL + C
 ---
 
 ## 🌐 Documentação Interativa
 
-Acesse a interface Swagger para testar a API diretamente no navegador:
+Com a aplicação rodando, acesse a interface Swagger para testar a API diretamente no navegador:
 
 ```
 http://localhost:8000/docs
@@ -136,9 +156,13 @@ http://localhost:8000/docs
 
 O projeto possui testes unitários (pré-processamento, validações e regras determinísticas) e testes de integração (pipeline completo com LLM mockado).
 
+Para executar os testes, abra o projeto em uma IDE ou editor de texto e, no terminal na raiz do projeto, execute:
+
 ```bash
 pytest
 ```
+
+> Os testes de integração utilizam mock do LLM e **não requerem** o Ollama rodando.
 
 ---
 
