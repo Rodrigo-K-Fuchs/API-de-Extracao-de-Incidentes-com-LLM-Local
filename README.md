@@ -79,8 +79,6 @@ Antes de começar, você precisa ter instalado:
 - [Docker Desktop](https://docs.docker.com/get-started/introduction/get-docker-desktop/)
 - [Git](https://git-scm.com/downloads) ou [GitHub CLI](https://cli.github.com/) *(para clonar o repositório)*
 
-> **Importante:** o Ollama **não** roda dentro do container Docker. A API se comunica com ele via HTTP a partir do host. Certifique-se de que o Ollama está rodando localmente antes de subir a aplicação.
-
 ---
 
 ## 🚀 Instalação e Configuração
