@@ -85,10 +85,11 @@ Antes de começar, você precisa ter instalado:
 
 ## 🚀 Instalação e Configuração
 
-### 1. Instalar o Docker Desktop
+### 1. Instalar o Docker Desktop e Git
 
 Acesse e siga as instruções do instalador para o seu sistema operacional:
 
+👉 https://git-scm.com/install/windows
 👉 https://docs.docker.com/get-started/introduction/get-docker-desktop/
 
 Após a instalação, **abra o Docker Desktop** e aguarde ele inicializar completamente (ícone na bandeja do sistema deve ficar verde/estável).
