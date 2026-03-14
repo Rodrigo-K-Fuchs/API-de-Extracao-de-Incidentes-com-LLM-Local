@@ -1,180 +1,121 @@
-# 🧠 API de Extração de Incidentes com LLM Local (Ollama)
+🧠 Incident Extraction API with Local LLM (Ollama)
+API that receives free-text descriptions of incidents and returns structured JSON data, using a local LLM via Ollama.
 
-API que recebe textos livres descrevendo incidentes e retorna informações estruturadas em JSON, utilizando um LLM local via Ollama.
+🎯 Goal
+Demonstrate a complete information extraction pipeline featuring:
 
----
+Deterministic text preprocessing
+Semantic extraction with a local LLM
+Structural validation with Pydantic
+A simple, documented HTTP API
 
-## 🎯 Objetivo
+All without relying on external services.
 
-Demonstrar um pipeline completo de extração de informações com:
+🏗️ Architecture
+User → FastAPI → Preprocessing → Ollama (LLM) → Pydantic → Structured JSON
 
-- Pré-processamento determinístico de texto
-- Extração semântica com LLM local
-- Validação estrutural com Pydantic
-- API HTTP simples e documentada
+User sends text via API
+Text goes through deterministic preprocessing
+Processed text is sent to the local LLM (Ollama)
+LLM output is validated with Pydantic
+API returns structured JSON
 
-Tudo isso sem depender de serviços externos.
 
----
+🧹 Text Preprocessing
+Before any LLM call, the text goes through fixed, predictable, and testable rules:
 
-## 🏗️ Arquitetura
+Normalization — lowercase and general cleanup
+Accent removal
+Date and time standardization
+Temporal hint extraction
+Fuzzy matching with Levenshtein distance — corrects minor word variations and reduces LLM dependency
 
-```
-Usuário → FastAPI → Pré-processamento → Ollama (LLM) → Pydantic → JSON estruturado
-```
+This ensures greater consistency, reproducibility, and testability throughout the pipeline.
 
-1. Usuário envia um texto via API
-2. O texto passa por pré-processamento determinístico
-3. O texto tratado é enviado ao LLM local (Ollama)
-4. O retorno do LLM é validado com Pydantic
-5. A API devolve um JSON estruturado
-
----
-
-## 🧹 Pré-Processamento de Texto
-
-Antes de qualquer chamada ao LLM, o texto passa por regras fixas, previsíveis e testáveis:
-
-- **Normalização** — lowercase e limpeza geral
-- **Remoção de acentos**
-- **Padronização de datas e horas**
-- **Extração de hints temporais**
-- **Fuzzy matching** com distância de Levenshtein — corrige pequenas variações de palavras e reduz dependência do LLM
-
-Isso garante maior **consistência**, **reprodutibilidade** e **testabilidade** no pipeline.
-
----
-
-## 📁 Estrutura do Projeto
-
-```
+📁 Project Structure
 .
-├── api.py                        # Ponto de entrada da API FastAPI
+├── api.py                        # FastAPI entry point
 │
 ├── core/
-│   ├── incident_extractor.py     # Orquestra o pipeline (prompt + LLM + parsing)
-│   └── text_preprocessor.py     # Pré-processamento determinístico do texto
+│   ├── incident_extractor.py     # Orchestrates the pipeline (prompt + LLM + parsing)
+│   └── text_preprocessor.py     # Deterministic text preprocessing
 │
 ├── model/
-│   ├── incident.py               # Modelo Pydantic do incidente
-│   └── incident_prompt.py        # Prompt utilizado pelo LLM
+│   ├── incident.py               # Pydantic incident model
+│   └── incident_prompt.py        # Prompt used by the LLM
 │
 ├── tests/
-│   ├── unit/                     # Testes unitários
-│   ├── integration/              # Testes de integração
+│   ├── unit/                     # Unit tests
+│   ├── integration/              # Integration tests
 │   └── conftest.py
 │
 ├── Dockerfile
 ├── docker-compose.yml
 ├── requirements.txt
 └── README.md
-```
 
----
+🛠️ Prerequisites
+Before getting started, make sure you have the following installed:
 
-## 🛠️ Pré-requisitos
+Docker Desktop
+Git or GitHub CLI (to clone the repository)
 
-Antes de começar, você precisa ter instalado:
 
-- [Docker Desktop](https://docs.docker.com/get-started/introduction/get-docker-desktop/)
-- [Git](https://git-scm.com/downloads) ou [GitHub CLI](https://cli.github.com/) *(para clonar o repositório)*
-
----
-
-## 🚀 Instalação e Configuração
-
-### 1. Instalar o Docker Desktop e Git
-
-Acesse e siga as instruções do instalador para o seu sistema operacional:
-
+🚀 Installation & Setup
+1. Install Docker Desktop and Git
+Visit the links below and follow the installer instructions for your operating system:
 👉 https://git-scm.com/install/windows
 👉 https://docs.docker.com/get-started/introduction/get-docker-desktop/
+After installation, open Docker Desktop and wait for it to fully initialize (the system tray icon should turn green/stable).
+2. Clone the repository
+Option A — GitHub CLI (recommended):
+bashgh repo clone Rodrigo-K-Fuchs/API-de-Extracao-de-Incidentes-com-LLM-Local
+Option B — Standard Git:
+bashgit clone https://github.com/Rodrigo-K-Fuchs/API-de-Extracao-de-Incidentes-com-LLM-Local.git
+Option C — Download ZIP:
+On the GitHub repository page, click Code → Download ZIP and extract the contents.
 
-Após a instalação, **abra o Docker Desktop** e aguarde ele inicializar completamente (ícone na bandeja do sistema deve ficar verde/estável).
+3. Navigate to the project folder
+After cloning or extracting the ZIP, go to the project root:
+bashcd API-de-Extracao-de-Incidentes-com-LLM-Local
 
-### 2. Clonar o repositório
+⚠️ All subsequent commands must be run from this folder.
 
-**Opção A — GitHub CLI (recomendado):**
 
-```bash
-gh repo clone Rodrigo-K-Fuchs/API-de-Extracao-de-Incidentes-com-LLM-Local
+🐳 Running with Docker
+Build the image
+bashdocker build -t incident-api .
+Start the application
+bashdocker compose up
 ```
 
-**Opção B — Git padrão:**
-
-```bash
-git clone https://github.com/Rodrigo-K-Fuchs/API-de-Extracao-de-Incidentes-com-LLM-Local.git
-```
-
-**Opção C — Download ZIP:**
-
-Na página do repositório no GitHub, clique em `Code` → `Download ZIP` e extraia o conteúdo.
+To stop:  
+`CTRL + C`
 
 ---
 
-### 3. Navegar até a pasta do projeto
+## 🌐 Interactive Documentation
 
-Após clonar ou extrair o ZIP, acesse a pasta raiz do projeto:
-
-```bash
-cd API-de-Extracao-de-Incidentes-com-LLM-Local
-```
-
-> ⚠️ **Todos os comandos a seguir devem ser executados a partir desta pasta.**
-
----
-
-## 🐳 Rodando com Docker
-
-### Build da imagem
-
-```bash
-docker build -t incident-api .
-```
-
-### Subindo a aplicação
-
-```bash
-docker compose up
-```
-Para encerrar:
-CTRL + C
----
-
-## 🌐 Documentação Interativa
-
-Com a aplicação rodando, acesse a interface Swagger para testar a API diretamente no navegador:
-
+With the application running, access the Swagger UI to test the API directly in your browser:
 ```
 http://localhost:8000/docs
-```
 
----
+🧪 Tests
+The project includes unit tests (preprocessing, validations, and deterministic rules) and integration tests (full pipeline with a mocked LLM).
+To run the tests, open the project in your IDE or text editor and, from the terminal at the project root, run:
+bashpytest
 
-## 🧪 Testes
+Integration tests use a mocked LLM and do not require Ollama to be running.
 
-O projeto possui testes unitários (pré-processamento, validações e regras determinísticas) e testes de integração (pipeline completo com LLM mockado).
 
-Para executar os testes, abra o projeto em uma IDE ou editor de texto e, no terminal na raiz do projeto, execute:
+⚠️ System Rules
 
-```bash
-pytest
-```
+Fields that cannot be inferred return null
+Impossible timestamps return "INVALID"
+The LLM never fabricates information
+All output goes through Pydantic validation
+The LLM does not decide alone — the code is in charge
 
-> Os testes de integração utilizam mock do LLM e **não requerem** o Ollama rodando.
 
----
-
-## ⚠️ Regras do Sistema
-
-- Campos não inferíveis retornam `null`
-- Horários impossíveis retornam `"INVALIDO"`
-- Nenhuma informação é inventada pelo LLM
-- Todo output passa por validação Pydantic
-- O LLM não decide sozinho — o código manda
-
----
-
-## 📖 Documentação no Código
-
-Todas as classes principais possuem docstrings descrevendo responsabilidade, entradas, saídas e comportamento esperado.
+📖 Code Documentation
+All main classes have docstrings describing their responsibility, inputs, outputs, and expected behavior.
